@@ -1,0 +1,14 @@
+{
+  "name": "beta",
+  "version": "1.0.0",
+  "description": "beta version of app to send midi",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "vasanth solomon",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^6.0.11"
+  }
+}
