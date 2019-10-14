@@ -1,28 +1,132 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-        <script type="text/javascript" src="./tapMode.js"></script>
-    <title>RORGUITARS</title>
-
+  <title>RORGuitars</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
 </head>
-
 <body>
-    <h1>RORGUITARS</h1>
+  <nav>
+    <div class="nav-wrapper">
+      <a class="brand-logo center">ROR Guitars</a>   
+    </div>
+  </nav>
+  <ul></ul>
+    <style>
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+        
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+          background-color: #dddddd;
+        }
+        </style>
+        </head>
+        <body>
+        
+        
+        <table>
+          <tr>
+            <th>BANK</th>
+            <th>TAP</th>
+            <th>Joy Stick</th>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td> 
+                <form>
+                    <button class="waves-effect waves-light btn" type="submit">ON/OFF</button>
+                </form>            
+            </td>
+            <td><input type="text" id="item" autofocus></td>
+            <td><p id="demo"></p>
+              <button class="waves-effect waves-light btn"onclick="myFunction()">Function 2</button></td>
+          </tr>
+        </table>  
+  <script>
     
+    const electron = require('electron'); 
+    const {ipcRenderer} = electron;
+    const ul = document.querySelector('ul');
 
-    <input type="button" id="btnEd">Call the function</input>
-    <p id="demo"></p>
-    
+    function myFunction() {
+    //document.getElementById("demo").innerHTML="Hello";
+    const item = document.querySelector('#item').value;
+    console.log('button2 clicked');
+    console.log(item);
+      var text = item
+      switch(text){
+
+        case "120": 
+        var     cmd=require('node-cmd');
+        cmd.run('sendmidi dev MIDI Guitar Channel 16 on 61 120');
+        break;
+
+        case "121":
+        var     cmd=require('node-cmd');
+        cmd.run('sendmidi dev MIDI Guitar Channel 16 on 61 121');
+        break;
+
+        case "119":
+        var     cmd=require('node-cmd');
+        cmd.run('sendmidi dev MIDI Guitar Channel 16 on 61 119');
+
+        default:
+        var     cmd=require('node-cmd');
+        cmd.run('sendmidi dev MIDI Guitar Channel 16 on 61 100');
+      }    
+    }
+
+    document.querySelector('form').addEventListener('submit', submitForm);
+    function submitForm(e){
+      e.preventDefault();
+      //var     cmd=require('node-cmd');
+        function tap(){
+          var     cmd=require('node-cmd');
+        console.log('yolo!');
+
+        cmd.run('sendmidi dev MIDI Guitar channel 16 on 60 64');
+        //cmd.run('sendmidi dev MIDI Guitar Channel 16 on 61 100');
+         }
+        tap();
+     }
 
 
+    ipcRenderer.on('item:add', function(e, item){
+      ul.className = 'collection';
+      const li = document.createElement('li');
+      li.className = 'collection-item';
+      const itemText = document.createTextNode(item);
 
-<button onclick="myFunction()">Click me</button>
+      li.appendChild(itemText);
 
-<p id="demo2"></p>
-    <script>
-            function myFunction() {
-              document.getElementById("demo2").innerHTML = "Hello World";
-            }
-            </script>
+      ul.appendChild(li);
+    });
+
+    ipcRenderer.on('item:clear', function(){
+      ul.className = '';
+      ul.innerHTML = '';
+    });
+
+    ul.addEventListener('dblclick', removeItem);
+
+    function removeItem(e){
+      
+      event.target.remove();
+
+      if(ul.children.length == 0){
+        ul.className = '';
+      }
+    }
+  </script>
+
+
 </body>
 </html>
